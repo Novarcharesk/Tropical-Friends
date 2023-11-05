@@ -5,10 +5,10 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public float dayDuration = 720f; // Duration of a full day in seconds (12 minutes)
-    public Color dayLightColor;
-    public float dayLightIntensity;
-    public Color nightLightColor;
-    public float nightLightIntensity;
+    public Color dayColor;
+    public Color nightColor;
+    public Color dawnColor;
+    public Color sunsetColor;
     public Light directionalLight; // Reference to your directional light
 
     private float currentTime = 0f; // Start time at 3:00 PM
@@ -27,16 +27,27 @@ public class TimeManager : MonoBehaviour
         // Determine if it's day or night based on currentTime
         bool isDaytime = IsDaytime(currentTime);
 
+        // Check for specific hours and print debug messages
+        int currentHour = Mathf.FloorToInt(currentTime / 3600) % 24;
+        if (currentHour == 5)
+        {
+            Debug.Log("It's 5:00 AM. Transitioning to dawn.");
+        }
+        else if (currentHour == 17)
+        {
+            Debug.Log("It's 5:00 PM. Transitioning to sunset.");
+        }
+
         // Update lighting based on the time of day
         if (isDaytime)
         {
             // Transition to daytime lighting
-            SetLighting(dayLightColor, dayLightIntensity);
+            SetLighting(dayColor);
         }
         else
         {
             // Transition to nighttime lighting
-            SetLighting(nightLightColor, nightLightIntensity);
+            SetLighting(nightColor);
         }
     }
 
@@ -54,10 +65,9 @@ public class TimeManager : MonoBehaviour
         return (hour >= sunriseStart && hour < sunsetStart) || (hour >= sunriseStart && hour < nightStart);
     }
 
-    private void SetLighting(Color lightColor, float lightIntensity)
+    private void SetLighting(Color lightColor)
     {
-        // Use Mathf.Lerp or other methods to smoothly transition lighting properties
+        // Use Mathf.Lerp or other methods to smoothly transition lighting color
         directionalLight.color = Color.Lerp(directionalLight.color, lightColor, Time.deltaTime);
-        directionalLight.intensity = Mathf.Lerp(directionalLight.intensity, lightIntensity, Time.deltaTime);
     }
 }
