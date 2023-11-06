@@ -25,6 +25,7 @@ public class InventoryManager : MonoBehaviour
         inventory.Add("logs", 0);
         inventory.Add("meat", 0);
         inventory.Add("fruit", 0);
+        inventory.Add("woodBundle", 0); // Add wood bundle to the inventory
     }
 
     // Add an item to the inventory

@@ -10,13 +10,16 @@ public class PlayerController : MonoBehaviour
 
     private GameObject interactedObject; // The object the player is currently interacting with
 
-    void Start()
+    private SwordPickup swordPickup; // Reference to the SwordPickup script
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        swordPickup = GetComponentInChildren<SwordPickup>(); // Assumes the sword is a child of the player
     }
 
-    void Update()
+    private void Update()
     {
         // Player movement
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -32,9 +35,10 @@ public class PlayerController : MonoBehaviour
         rb.velocity = moveDirection * moveSpeed;
 
         // Player attack
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && swordPickup.HasSwordBeenPickedUp())
         {
-            animator.SetTrigger("Attack");
+            // Implement attack logic here
+            Attack();
         }
 
         // Interact with objects
@@ -53,7 +57,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         // When the player enters the trigger zone of an interactable object
         if (other.CompareTag("InteractableObject"))
@@ -62,12 +66,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         // When the player exits the trigger zone of an interactable object
         if (other.gameObject == interactedObject)
         {
             interactedObject = null;
         }
+    }
+
+    private void Attack()
+    {
+        // Implement your attack logic here
+        // Example: Play attack animation and deal damage to enemies
     }
 }
